@@ -1,21 +1,26 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import fetchApi from '../../lib/strapi';
+import type Article from '../../interfaces/article';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
+  const articles = await fetchApi<Article[]>({
+    endpoint: 'articles',
+	query: { populate: 'blocks' },
+    wrappedByKey: 'data',
+  });
 
-const post = Astro.props;
-const { Content } = await render(post);
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: article,
+  }));
+}
+type Props = Article;
+
+const article = Astro.props;
+
 ---
 
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost {...article}>
 </BlogPost>
