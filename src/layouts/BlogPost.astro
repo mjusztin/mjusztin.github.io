@@ -10,14 +10,14 @@ import { marked } from 'marked';
 
 type Props = Article;
 
-const { id, documentId, description, title, cover, slug, createdAt, updatedAt, publishedAt, content } = Astro.props;
+const { id, documentId, title, content, slug, coverImage, createdAt, updatedAt, publishedAt } = Astro.props;
 const htmlContent = content ? marked(content) : '';
 
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={title} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -64,7 +64,7 @@ const htmlContent = content ? marked(content) : '';
 		<main>
 			<article>
 				<div class="hero-image">
-					{cover && <Image width={1020} height={510} src={cover} alt="" />}
+					{coverImage && <Image width={1020} height={510} src={coverImage} alt="" />}
 				</div>
 				<div class="prose">
 					<div class="title">
@@ -81,7 +81,7 @@ const htmlContent = content ? marked(content) : '';
 						<h1>{title}</h1>
 						<hr />
 					</div>
-					<p>{description}</p>
+					<p>{title}</p>
 					{htmlContent && <div class="content" set:html={htmlContent}></div>}
 				</div>
 			</article>

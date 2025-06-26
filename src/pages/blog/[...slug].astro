@@ -6,8 +6,7 @@ import { render } from 'astro:content';
 
 export async function getStaticPaths() {
   const articles = await fetchApi<Article[]>({
-    endpoint: 'articles',
-	query: { populate: 'blocks' },
+    endpoint: 'bionic-articles',
     wrappedByKey: 'data',
   });
 

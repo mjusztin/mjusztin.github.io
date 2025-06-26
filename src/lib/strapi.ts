@@ -42,7 +42,7 @@ export default async function fetchApi<T>({
   if (wrappedByList) {
     data = data[0];
   }
-
+/*
   if (Array.isArray(data)) {
     data = data.map(item => ({
       ...item,
@@ -51,8 +51,7 @@ export default async function fetchApi<T>({
   } else if (data && data.blocks && Array.isArray(data.blocks) && data.blocks.length > 0) {
     data.content = data.blocks[0].body;
   }
-
-  console.log('asd');
+*/
   console.log('Data fetched from Strapi:', data);
 
   return data as T;

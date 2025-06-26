@@ -10,7 +10,7 @@ import fetchApi from '../../lib/strapi';
 import type Article from '../../interfaces/article';
 
 const articles = await fetchApi<Article[]>({
-  endpoint: 'articles', // the content type to fetch
+  endpoint: 'bionic-articles', // the content type to fetch
   wrappedByKey: 'data', // the key to unwrap the response
 });
 
@@ -111,8 +111,8 @@ const posts = (await getCollection('blog')).sort(
 						articles.map((article) => (
 							<li>
 								<a href={`/blog/${article.slug}/`}>
-									{article.cover && (
-										<Image width={720} height={360} src={article.cover} alt="" />
+									{article.coverImage && (
+										<Image width={720} height={360} src={article.coverImage} alt="" />
 									)}
 									<h4 class="title">{article.title}</h4>
 									<p class="date">
