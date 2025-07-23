@@ -10,14 +10,14 @@ import { marked } from 'marked';
 
 type Props = Article;
 
-const { id, documentId, title, content, slug, coverImage, createdAt, updatedAt, publishedAt } = Astro.props;
-const htmlContent = content ? marked(content) : '';
+const article = Astro.props;
+//const htmlContent = content ? marked(content) : '';
 
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={title} />
+		<BaseHead title={article.title} description={article.title} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -63,26 +63,37 @@ const htmlContent = content ? marked(content) : '';
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
+<!-- 				<div class="hero-image">
 					{coverImage && <Image width={1020} height={510} src={coverImage} alt="" />}
-				</div>
+				</div> -->
 				<div class="prose">
 					<div class="title">
 						<div class="date">
-							<FormattedDate date={new Date(publishedAt)} />
+							<FormattedDate date={new Date(article.publishedAt)} />
 							{
-								new Date(updatedAt) && (
+								new Date(article.updatedAt) && (
 									<div class="last-updated-on">
-										Last updated on <FormattedDate date={new Date(updatedAt)} />
+										Last updated on <FormattedDate date={new Date(article.updatedAt)} />
 									</div>
 								)
 							}
 						</div>
-						<h1>{title}</h1>
+						<h1>{article.title}</h1>
 						<hr />
 					</div>
-					<p>{title}</p>
-					{htmlContent && <div class="content" set:html={htmlContent}></div>}
+					{article.content_blocks?.map((block) => {
+						if (block.__component === 'article-components.paragraph') {
+							return <p>{block.text}</p>;
+						} else if (block.__component === 'article-components.image') {
+							return (
+								<div class="content-image">
+									<img src={`${import.meta.env.STRAPI_URL}${block.data.url}`} width={720} height={400} />
+									{block.caption && <p class="image-caption">{block.caption}</p>}
+								</div>
+							);
+						}
+					})}
+					<!-- {htmlContent && <div class="content" set:html={htmlContent}></div>} -->
 				</div>
 			</article>
 		</main>

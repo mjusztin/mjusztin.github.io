@@ -111,9 +111,9 @@ const posts = (await getCollection('blog')).sort(
 						articles.map((article) => (
 							<li>
 								<a href={`/blog/${article.slug}/`}>
-									{article.coverImage && (
+{/* 									{article.coverImage && (
 										<Image width={720} height={360} src={article.coverImage} alt="" />
-									)}
+									)} */}
 									<h4 class="title">{article.title}</h4>
 									<p class="date">
 										<FormattedDate date={new Date(article.publishedAt)} />

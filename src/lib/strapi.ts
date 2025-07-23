@@ -30,7 +30,7 @@ export default async function fetchApi<T>({
       url.searchParams.append(key, value);
     });
   }
-  //console.log('Fetching from Strapi:', url.toString());
+  console.log('Fetching from Strapi:', url.toString());
   const res = await fetch(url.toString());
   //console.log('Response from Strapi:', res);
   let data = await res.json();
