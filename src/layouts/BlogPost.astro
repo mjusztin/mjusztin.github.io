@@ -102,6 +102,11 @@ const article = Astro.props;
 							);
 						}
 					})}
+					{article.source_url && (
+						<div class="source-link">
+							<p><strong>Forrás:</strong> <a href={article.source_url} target="_blank" rel="noopener noreferrer">{article.source_url}</a></p>
+						</div>
+					)}
 					<!-- {htmlContent && <div class="content" set:html={htmlContent}></div>} -->
 				</div>
 			</article>

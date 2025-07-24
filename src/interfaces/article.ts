@@ -26,4 +26,5 @@ export default interface Article {
     updatedAt: string;
     publishedAt: string;
     content_blocks: [ContentBlock];
+    source_url: string
 }
