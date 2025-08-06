@@ -91,9 +91,17 @@ const article = Astro.props;
 						if (block.__component === 'article-components.paragraph') {
 							return <p>{block.text}</p>;
 						} else if (block.__component === 'article-components.image') {
+							// Skip rendering if data is null or url is missing
+							if (!block.data || !block.data.url) {
+								return null;
+							}
+							
+							const imageUrl = block.data.url.startsWith('http') 
+								? block.data.url 
+								: `${import.meta.env.STRAPI_URL}${block.data.url}`;
 							return (
 								<div class="content-image">
-									<img src={`${import.meta.env.STRAPI_URL}${block.data.url}`} width={720} height={400} />
+									<img src={imageUrl} width={720} height={400} />
 									{block.caption && <p class="image-caption">{block.caption}</p>}
 								</div>
 							);
