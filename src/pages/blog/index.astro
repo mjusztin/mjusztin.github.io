@@ -98,29 +98,19 @@ const posts = (await getCollection('blog')).sort(
 		<main>
 			<section>
 				<ul>
-					{/*
-					articles.map((article) => (
-						<li>
-							<a href={`/blog/${article.slug}/`}>
-								{article.title}
-							</a>
-						</li>
-					))
-					*/
-					
-						articles.map((article) => (
-							<li>
-								<a href={`/blog/${article.slug}/`}>
-{/* 									{article.coverImage && (
-										<Image width={720} height={360} src={article.coverImage} alt="" />
-									)} */}
-									<h4 class="title">{article.title}</h4>
-									<p class="date">
-										<FormattedDate date={new Date(article.publishedAt)} />
-									</p>
-								</a>
-							</li>
-						))
+					{
+						articles
+							.sort((a, b) => new Date(b.publishedAt).valueOf() - new Date(a.publishedAt).valueOf())
+							.map((article) => (
+								<li>
+									<a href={`/blog/${article.slug}/`}>
+										<h4 class="title">{article.title}</h4>
+										<p class="date">
+											<FormattedDate date={new Date(article.publishedAt)} />
+										</p>
+									</a>
+								</li>
+							))
 					}
 				</ul>
 			</section>

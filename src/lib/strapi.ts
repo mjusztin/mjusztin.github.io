@@ -31,9 +31,34 @@ export default async function fetchApi<T>({
     });
   }
   console.log('Fetching from Strapi:', url.toString());
-  const res = await fetch(url.toString());
-  //console.log('Response from Strapi:', res);
-  let data = await res.json();
+  const allData: any[] = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const paginatedUrl = new URL(url.toString());
+    paginatedUrl.searchParams.set('pagination[page]', page.toString());
+    paginatedUrl.searchParams.set('pagination[pageSize]', '25');
+    
+    const res = await fetch(paginatedUrl.toString());
+    const response = await res.json();
+    console.log('Response from Strapi:', res);
+    if (response.data && response.data.length > 0) {
+      allData.push(...response.data);
+      page++;
+      
+      // Check if there are more pages
+      const pagination = response.meta?.pagination;
+      hasMore = pagination && page <= pagination.pageCount;
+    } else {
+      hasMore = false;
+    }
+  }
+
+  // Create a mock response object for the existing logic
+  const res = { json: async () => ({ data: allData }) };
+
+  let data: any = await res.json();
   console.log('All data fetched from Strapi:', data);
   if (wrappedByKey) {
     data = data[wrappedByKey];
@@ -42,16 +67,7 @@ export default async function fetchApi<T>({
   if (wrappedByList) {
     data = data[0];
   }
-/*
-  if (Array.isArray(data)) {
-    data = data.map(item => ({
-      ...item,
-      content: item.blocks && item.blocks.length > 0 ? item.blocks[0].body : undefined,
-    }));
-  } else if (data && data.blocks && Array.isArray(data.blocks) && data.blocks.length > 0) {
-    data.content = data.blocks[0].body;
-  }
-*/
+
   console.log('Data fetched from Strapi:', data);
 
   return data as T;
